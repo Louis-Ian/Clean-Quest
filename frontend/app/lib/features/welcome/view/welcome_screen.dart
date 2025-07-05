@@ -1,4 +1,7 @@
+import 'package:app/core/theme/app_text_styles.dart';
 import 'package:app/features/welcome/viewmodel/welcome_viewmodel.dart';
+import 'package:app/shared/widgets/primary_button.dart';
+import 'package:app/shared/widgets/secondary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,9 +12,9 @@ class WelcomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.read(welcomeViewModelProvider.notifier);
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
@@ -20,92 +23,58 @@ class WelcomeScreen extends ConsumerWidget {
                 width: double.infinity,
                 height: 300,
                 fit: BoxFit.cover,
+                alignment: Alignment.bottomCenter,
               ),
             ),
-            const SizedBox(height: 32),
-            const Text(
-              'Welcome to CleanQuest!',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                'Transform chores into an exciting adventure. '
-                'Create or join a family to begin your quest.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.black87),
-              ),
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () {
-                        viewModel.createFamily();
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xFF1EA7FD),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Create a Family',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'Welcome to CleanQuest!',
+                      style: AppTextStyles.headline,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Transform chores into an exciting adventure. '
+                      'Create or join a family to begin your quest.',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.body,
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      width: double.infinity,
+                      child: PrimaryButton(
+                        onPressed: () {
+                          viewModel.createFamily();
+                        },
+                        text: 'Create a Family',
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () {
-                        viewModel.joinFamily();
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xFFF0F0F0),
-                        foregroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32),
-                          side: const BorderSide(color: Color(0xFFFFFFFF)),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Join a Family',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: SecondaryButton(
+                        onPressed: () {
+                          viewModel.joinFamily();
+                        },
+                        text: 'Join a Family',
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 24),
+                    Text(
+                      'By proceeding, you consent to our Terms of Service and Privacy Policy.',
+                      style: AppTextStyles.bodyMuted,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 24),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                'By proceeding, you consent to our Terms of Service and Privacy Policy.',
-                style: TextStyle(fontSize: 12, color: Colors.black54),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 16),
           ],
         ),
       ),
