@@ -14,7 +14,7 @@ class CleanQuestApp extends ConsumerWidget {
       title: 'CleanQuest',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Inter',
+        fontFamily: 'Plus Jakarta Sans',
         scaffoldBackgroundColor: const Color(0xFFF9FAFB),
         useMaterial3: true,
       ),
