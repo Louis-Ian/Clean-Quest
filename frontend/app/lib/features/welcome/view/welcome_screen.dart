@@ -1,5 +1,6 @@
 import 'package:app/core/theme/app_text_styles.dart';
-import 'package:app/features/welcome/viewmodel/welcome_viewmodel.dart';
+import 'package:app/features/welcome/view/create_family_dialog.dart';
+import 'package:app/features/welcome/view/join_family_dialog.dart';
 import 'package:app/shared/widgets/primary_button.dart';
 import 'package:app/shared/widgets/secondary_button.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,6 @@ class WelcomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.read(welcomeViewModelProvider.notifier);
-
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -49,8 +48,20 @@ class WelcomeScreen extends ConsumerWidget {
                     SizedBox(
                       width: double.infinity,
                       child: PrimaryButton(
-                        onPressed: () {
-                          viewModel.createFamily();
+                        onPressed: () async {
+                          final result = await showDialog<dynamic>(
+                            context: context,
+                            builder: (context) => const CreateFamilyDialog(),
+                          );
+                          if (result != null && context.mounted) {
+                            // Handle successful family creation
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Welcome to ${result.name}!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          }
                         },
                         text: 'Create a Family',
                       ),
@@ -59,8 +70,20 @@ class WelcomeScreen extends ConsumerWidget {
                     SizedBox(
                       width: double.infinity,
                       child: SecondaryButton(
-                        onPressed: () {
-                          viewModel.joinFamily();
+                        onPressed: () async {
+                          final result = await showDialog<dynamic>(
+                            context: context,
+                            builder: (context) => const JoinFamilyDialog(),
+                          );
+                          if (result != null && context.mounted) {
+                            // Handle successful family joining
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Welcome to ${result.name}!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          }
                         },
                         text: 'Join a Family',
                       ),

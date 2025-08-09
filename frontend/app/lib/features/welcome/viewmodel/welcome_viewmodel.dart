@@ -1,18 +1,54 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../model/welcome_state.dart';
+import '../service/family_service.dart';
+import '../repository/family_repository.dart';
+import '../repository/firestore_family_repository.dart';
 
-final welcomeViewModelProvider = NotifierProvider<WelcomeViewModel, void>(() => WelcomeViewModel());
+final familyRepositoryProvider = Provider<FamilyRepository>((ref) {
+  return FirestoreFamilyRepository();
+});
 
-class WelcomeViewModel extends Notifier<void> {
+final familyServiceProvider = Provider<FamilyService>((ref) {
+  final repository = ref.read(familyRepositoryProvider);
+  return FamilyService(repository: repository);
+});
+
+final welcomeViewModelProvider = NotifierProvider<WelcomeViewModel, WelcomeState>(
+  () => WelcomeViewModel(),
+);
+
+class WelcomeViewModel extends Notifier<WelcomeState> {
+  late final FamilyService _familyService;
+
   @override
-  void build() {
-    // No state, but could be used to init logic
+  WelcomeState build() {
+    _familyService = ref.read(familyServiceProvider);
+    return const WelcomeInitial();
   }
 
-  void createFamily() {
-    //TODO: business logic, service call, etc.
+  Future<void> createFamily(String familyName) async {
+    state = const WelcomeLoading();
+
+    try {
+      final family = await _familyService.createFamily(familyName);
+      state = WelcomeSuccess(family);
+    } catch (e) {
+      state = WelcomeError(e.toString());
+    }
   }
 
-  void joinFamily() {
-    //TODO: business logic
+  Future<void> joinFamily(String inviteCode) async {
+    state = const WelcomeLoading();
+
+    try {
+      final family = await _familyService.joinFamily(inviteCode);
+      state = WelcomeSuccess(family);
+    } catch (e) {
+      state = WelcomeError(e.toString());
+    }
+  }
+
+  void resetState() {
+    state = const WelcomeInitial();
   }
 }
